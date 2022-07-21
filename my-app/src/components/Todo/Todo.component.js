@@ -7,12 +7,14 @@ import { deleteRequest, updateRequest, completedRequest } from '../../saga/Todos
 import { todosSelector } from '../../saga/Todos/todos.selector';
 import todoHooks from './todo.hooks';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 const StytedDiv = styled.button`
     padding-left: 10px;
     border: 0;
     background-color: rgba(0, 0, 0, 0);
 `;
 export default function Todo(props) {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { title, id, complete, setListSearch } = props;
     const { showEdit, setShowEdit, todo, setTodo } = todoHooks();
@@ -22,7 +24,7 @@ export default function Todo(props) {
     };
 
     const handleEditClick = () => {
-        setShowEdit(!showEdit);
+        navigate(`/${id}/${title}`, { replace: true });
     };
     const handleSaveClick = () => {
         switch (todo) {

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { todosSelector } from '../../saga/Todos/todos.selector';
 import 'react-toastify/dist/ReactToastify.css';
 import addTodoHook from './addTodo.hooks';
+import ListTodo from '../ListTodo/ListTodo.component';
 import { toast } from 'react-toastify';
 export default function AddTodo() {
     const dispatch = useDispatch();
@@ -36,19 +37,29 @@ export default function AddTodo() {
 
     return (
         <>
-            <Row>
-                <Col span={3}>
-                    <label htmlFor="todo">Input Todo</label>
-                </Col>
-                <Col span={20}>
-                    <Input placeholder="New Todo" size="medium" id="todo" onChange={handleChange} value={newTodo} />
-                </Col>
-                <Col span={1}>
-                    <Tooltip title="Add">
-                        <Button type="primary" shape="circle" icon={<PlusCircleOutlined />} onClick={handleClickAdd} />
-                    </Tooltip>
-                </Col>
-            </Row>
+            <div className="addTodo">
+                <Row>
+                    <Col span={3}>
+                        <label htmlFor="todo">Input Todo</label>
+                    </Col>
+                    <Col span={20}>
+                        <Input placeholder="New Todo" size="medium" id="todo" onChange={handleChange} value={newTodo} />
+                    </Col>
+                    <Col span={1}>
+                        <Tooltip title="Add">
+                            <Button
+                                type="primary"
+                                shape="circle"
+                                icon={<PlusCircleOutlined />}
+                                onClick={handleClickAdd}
+                            />
+                        </Tooltip>
+                    </Col>
+                    <Col span={24}>
+                        <ListTodo />
+                    </Col>
+                </Row>
+            </div>
         </>
     );
 }

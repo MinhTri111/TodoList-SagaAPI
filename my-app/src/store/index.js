@@ -1,2 +1,2 @@
-import { store, persistor } from './store';
-export { store, persistor };
+import store from './store';
+export default store;

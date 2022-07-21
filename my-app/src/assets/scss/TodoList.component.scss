@@ -9,11 +9,22 @@ body {
         display: flex;
         justify-content: center;
         margin-top: 30px;
+        .addTodo {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .editTodo {
+            margin-top: 20px;
+        }
         .TodoList {
             width: 60%;
+            height: 90vh;
             border-radius: 20px;
             padding: 20px 50px;
             background: linear-gradient(#ef3b36, #ffffff);
+            .listTodo {
+                width: 100%;
+            }
             .AddTodo {
                 margin: 0px auto;
                 label {

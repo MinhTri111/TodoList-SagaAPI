@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BLOG_API = {
+const TODO_API = {
     fetch: async () => {
         return await axios.get('https://62d4fccd5112e98e4856080b.mockapi.io/todos');
     },
@@ -13,4 +13,4 @@ const BLOG_API = {
         return await axios.delete(`https://62d4fccd5112e98e4856080b.mockapi.io/todos/${id}`);
     },
 };
-export default BLOG_API;
+export default TODO_API;

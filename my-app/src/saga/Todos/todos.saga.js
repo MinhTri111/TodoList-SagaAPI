@@ -6,7 +6,6 @@ import API from './todos.api';
 function* fetchSaga({ params }) {
     try {
         const res = yield call(API.fetch, params);
-        console.log(res);
         if (res) {
             yield put(Action.fetchSuccess(res));
         }
