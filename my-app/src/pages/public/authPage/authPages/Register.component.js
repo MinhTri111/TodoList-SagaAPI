@@ -1,18 +1,20 @@
 import React from 'react';
 import { useField, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { Input, Button, Row, Col } from 'antd';
-import { useDispatch } from 'react-redux';
+import { Input, Button, Row, Col, Spin } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerRequest } from '../../../../saga/Auth/auth.action';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { isLoadingSelector } from '../../../../saga/Auth/auth.selector';
+
 const MyTextInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     return (
         <>
             <label htmlFor={props.id || props.name}>
                 {label}
-                <Input {...field} {...props} />
+                <Input {...field} {...props} autoComplete="on" />
             </label>
             {meta.touched || meta.error ? <div>{meta.error}</div> : null}
         </>
@@ -21,6 +23,9 @@ const MyTextInput = ({ label, ...props }) => {
 export default function Register() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const loading = useSelector(isLoadingSelector);
+    console.log(loading);
+
     return (
         <>
             <Row>
@@ -34,17 +39,25 @@ export default function Register() {
                         validationSchema={Yup.object({
                             account: Yup.string().required('Required'),
                             password: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
-                            cfpassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+                            cfpassword: Yup.string()
+                                .oneOf([Yup.ref('password'), null], 'Passwords must match')
+                                .required('Required'),
                         })}
                         onSubmit={(values) => {
                             const account = values.account;
                             const password = values.password;
                             const name = values.name;
                             dispatch(
-                                registerRequest({ account, password, name }, () => {
-                                    navigate('/login');
-                                    toast('Register Success!!!');
-                                }),
+                                registerRequest(
+                                    { account, password, name },
+                                    () => {
+                                        navigate('/login');
+                                        toast.success('Register Success!!!');
+                                    },
+                                    () => {
+                                        toast.error('Account already exists');
+                                    },
+                                ),
                             );
                         }}
                     >
@@ -76,6 +89,9 @@ export default function Register() {
                             </Button>
                         </Form>
                     </Formik>
+                </Col>
+                <Col span={2} offset={22}>
+                    {loading && <Spin tip="Loading..." />}
                 </Col>
             </Row>
         </>

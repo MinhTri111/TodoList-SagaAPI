@@ -1,20 +1,29 @@
 import React from 'react';
 import { useField, Form, Formik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Input, Button, Row, Col } from 'antd';
+import { Input, Button, Row, Col, Spin } from 'antd';
+import { loginRequest } from '../../../../saga/Auth/auth.action';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { isLoadingSelector } from '../../../../saga/Auth/auth.selector';
 const MyTextInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     return (
         <>
             <label htmlFor={props.id || props.name}>
                 {label}
-                <Input {...field} {...props} />
+                <Input {...field} {...props} autoComplete="on" />
             </label>
             {meta.touched || meta.error ? <div>{meta.error}</div> : null}
         </>
     );
 };
+
 export default function Login() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const loading = useSelector(isLoadingSelector);
     return (
         <>
             <Row>
@@ -28,9 +37,19 @@ export default function Login() {
                             account: Yup.string().required('Required'),
                             password: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
                         })}
-                        onSubmit={async (values) => {
-                            await new Promise((r) => setTimeout(r, 500));
-                            alert(JSON.stringify(values, null, 2));
+                        onSubmit={(values) => {
+                            dispatch(
+                                loginRequest(
+                                    values,
+                                    () => {
+                                        toast.success('Login success!!!');
+                                        navigate('/');
+                                    },
+                                    () => {
+                                        toast.error('Account or password is wrong!!! ');
+                                    },
+                                ),
+                            );
                         }}
                     >
                         <Form>
@@ -53,6 +72,9 @@ export default function Login() {
                             </Button>
                         </Form>
                     </Formik>
+                </Col>
+                <Col span={2} offset={22}>
+                    {loading && <Spin tip="Loading..." />}
                 </Col>
             </Row>
         </>

@@ -4,7 +4,7 @@ import authReducer from '../saga/Auth/auth.reducer';
 
 const rootReducer = () =>
     combineReducers({
-        auth: authReducer,
+        auths: authReducer,
         todos: todosReducer,
     });
 

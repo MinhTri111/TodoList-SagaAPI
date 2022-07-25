@@ -8,6 +8,7 @@ import { todosSelector } from '../../saga/Todos/todos.selector';
 import todoHooks from './todo.hooks';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { isLoginSelector } from '../../saga/Auth/auth.selector';
 const StytedDiv = styled.button`
     padding-left: 10px;
     border: 0;
@@ -22,7 +23,7 @@ export default function Todo(props) {
     const handleChange = (e) => {
         setTodo(e.target.value);
     };
-
+    const isLogin = useSelector(isLoginSelector);
     const handleEditClick = () => {
         navigate(`/${id}/${title}`, { replace: true });
     };
@@ -74,77 +75,81 @@ export default function Todo(props) {
                         <p className="test">{title}</p>
                     </Col>
                     <Col span={1}>{complete && <CheckOutlined />}</Col>
+                    {isLogin && (
+                        <Col span={5}>
+                            <StytedDiv>
+                                {complete ? (
+                                    <Checkbox checked onChange={handleChangeCheckbox}>
+                                        Done
+                                    </Checkbox>
+                                ) : (
+                                    <Checkbox onChange={handleChangeCheckbox} checked={false}>
+                                        Done
+                                    </Checkbox>
+                                )}
+                            </StytedDiv>
 
-                    <Col span={5}>
-                        <StytedDiv>
-                            {complete ? (
-                                <Checkbox checked onChange={handleChangeCheckbox}>
-                                    Done
-                                </Checkbox>
-                            ) : (
-                                <Checkbox onChange={handleChangeCheckbox} checked={false}>
-                                    Done
-                                </Checkbox>
-                            )}
-                        </StytedDiv>
-                        <Space>
-                            <Tooltip title="Delete">
-                                <Button
-                                    type="primary"
-                                    danger
-                                    shape="circle"
-                                    icon={<DeleteOutlined />}
-                                    onClick={handleDeleteClick}
-                                />
-                            </Tooltip>
-                            <Tooltip title="Edit">
-                                <Button
-                                    type="primary"
-                                    shape="circle"
-                                    icon={<EditOutlined />}
-                                    onClick={handleEditClick}
-                                />
-                            </Tooltip>
-                        </Space>
-                    </Col>
+                            <Space>
+                                <Tooltip title="Delete">
+                                    <Button
+                                        type="primary"
+                                        danger
+                                        shape="circle"
+                                        icon={<DeleteOutlined />}
+                                        onClick={handleDeleteClick}
+                                    />
+                                </Tooltip>
+                                <Tooltip title="Edit">
+                                    <Button
+                                        type="primary"
+                                        shape="circle"
+                                        icon={<EditOutlined />}
+                                        onClick={handleEditClick}
+                                    />
+                                </Tooltip>
+                            </Space>
+                        </Col>
+                    )}
                 </Row>
             ) : (
                 <Row>
                     <Col span={19}>
                         <Input size="medium" placeholder={title} onChange={handleChange} />
                     </Col>
-                    <Col span={5}>
-                        <StytedDiv>
-                            {complete ? (
-                                <Checkbox checked onChange={handleChangeCheckbox}>
-                                    Done
-                                </Checkbox>
-                            ) : (
-                                <Checkbox onChange={handleChangeCheckbox} checked={false}>
-                                    Done
-                                </Checkbox>
-                            )}
-                        </StytedDiv>
-                        <Space>
-                            <Tooltip title="Exit">
-                                <Button
-                                    type="primary"
-                                    danger
-                                    shape="circle"
-                                    icon={<LogoutOutlined />}
-                                    onClick={handleExitClick}
-                                />
-                            </Tooltip>
-                            <Tooltip title="Save">
-                                <Button
-                                    type="primary"
-                                    shape="circle"
-                                    icon={<CheckOutlined />}
-                                    onClick={handleSaveClick}
-                                />
-                            </Tooltip>
-                        </Space>
-                    </Col>
+                    {isLogin && (
+                        <Col span={5}>
+                            <StytedDiv>
+                                {complete ? (
+                                    <Checkbox checked onChange={handleChangeCheckbox}>
+                                        Done
+                                    </Checkbox>
+                                ) : (
+                                    <Checkbox onChange={handleChangeCheckbox} checked={false}>
+                                        Done
+                                    </Checkbox>
+                                )}
+                            </StytedDiv>
+                            <Space>
+                                <Tooltip title="Exit">
+                                    <Button
+                                        type="primary"
+                                        danger
+                                        shape="circle"
+                                        icon={<LogoutOutlined />}
+                                        onClick={handleExitClick}
+                                    />
+                                </Tooltip>
+                                <Tooltip title="Save">
+                                    <Button
+                                        type="primary"
+                                        shape="circle"
+                                        icon={<CheckOutlined />}
+                                        onClick={handleSaveClick}
+                                    />
+                                </Tooltip>
+                            </Space>
+                        </Col>
+                    )}
                 </Row>
             )}
         </>

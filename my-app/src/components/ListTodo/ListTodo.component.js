@@ -10,16 +10,13 @@ import React, { useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 const ListTodo = (props) => {
     const dispatch = useDispatch();
-    const listTodo = useSelector(todosSelector);
-    const loading = useSelector(loadingSelector);
+
     useEffect(() => {
         dispatch(fetchRequest('fetchRequest'));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    const x = useSelector((state) => {
-        console.log(state);
-        return state;
-    });
+    const listTodo = useSelector(todosSelector);
+    const loading = useSelector(loadingSelector);
     return (
         <>
             <Row className="listTodo">
@@ -31,9 +28,7 @@ const ListTodo = (props) => {
                                 itemLayout="vertical"
                                 size="large"
                                 pagination={{
-                                    onChange: (page) => {
-                                        console.log(page);
-                                    },
+                                    onChange: (page) => {},
                                     pageSize: 4,
                                 }}
                                 dataSource={listTodo.data}
@@ -49,9 +44,7 @@ const ListTodo = (props) => {
                             itemLayout="vertical"
                             size="large"
                             pagination={{
-                                onChange: (page) => {
-                                    console.log(page);
-                                },
+                                onChange: (page) => {},
                                 pageSize: 4,
                             }}
                             dataSource={
