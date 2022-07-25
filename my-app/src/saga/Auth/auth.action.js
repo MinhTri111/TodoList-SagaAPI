@@ -6,7 +6,7 @@ export const registerRequest = (params, callback, callback1) => ({
     callback,
     callback1,
 });
-export const registerSuccess = (payload) => ({ type: Types.REGISTER_SUCCESS, payload });
+export const registerSuccess = () => ({ type: Types.REGISTER_SUCCESS });
 export const registerFailure = (error) => ({ type: Types.REGISTER_ERROR, error });
 
 export const loginRequest = (params, callback, callback1) => ({

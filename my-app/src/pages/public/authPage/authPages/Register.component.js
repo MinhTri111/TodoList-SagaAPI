@@ -32,41 +32,39 @@ export default function Register() {
                 <Col span={24}>
                     <Formik
                         initialValues={{
-                            account: '',
+                            email: '',
                             password: '',
                             cfpassword: '',
                         }}
                         validationSchema={Yup.object({
-                            account: Yup.string().required('Required'),
+                            email: Yup.string().required('Required'),
                             password: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
                             cfpassword: Yup.string()
                                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
                                 .required('Required'),
                         })}
                         onSubmit={(values) => {
-                            const account = values.account;
+                            const email = values.email;
                             const password = values.password;
-                            const name = values.name;
                             dispatch(
                                 registerRequest(
-                                    { account, password, name },
+                                    { email, password },
                                     () => {
                                         navigate('/login');
                                         toast.success('Register Success!!!');
                                     },
-                                    () => {
-                                        toast.error('Account already exists');
+                                    (message) => {
+                                        toast.error(message);
                                     },
                                 ),
                             );
                         }}
                     >
                         <Form>
-                            <MyTextInput label="Name:" name="name" id="name" type="text" placeholder="Your name..." />
                             <MyTextInput
-                                label="Account:"
-                                name="account"
-                                id="account"
+                                label="Email:"
+                                name="email"
+                                id="email"
                                 type="text"
                                 placeholder="Your account..."
                             />

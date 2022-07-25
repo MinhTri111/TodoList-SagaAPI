@@ -30,11 +30,11 @@ export default function Login() {
                 <Col span={24}>
                     <Formik
                         initialValues={{
-                            account: '',
+                            email: '',
                             password: '',
                         }}
                         validationSchema={Yup.object({
-                            account: Yup.string().required('Required'),
+                            email: Yup.string().required('Required'),
                             password: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
                         })}
                         onSubmit={(values) => {
@@ -45,8 +45,8 @@ export default function Login() {
                                         toast.success('Login success!!!');
                                         navigate('/');
                                     },
-                                    () => {
-                                        toast.error('Account or password is wrong!!! ');
+                                    (mes) => {
+                                        toast.error(mes);
                                     },
                                 ),
                             );
@@ -54,11 +54,11 @@ export default function Login() {
                     >
                         <Form>
                             <MyTextInput
-                                label="Account:"
-                                name="account"
-                                id="account"
+                                label="Email:"
+                                name="email"
+                                id="email"
                                 type="text"
-                                placeholder="Your account..."
+                                placeholder="Your email..."
                             />
                             <MyTextInput
                                 label="PassWord:"

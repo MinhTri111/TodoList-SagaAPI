@@ -8,18 +8,12 @@ import { useSelector } from 'react-redux';
 import { isLoginSelector } from '../../saga/Auth/auth.selector';
 const TodoList = () => {
     const isLogin = useSelector(isLoginSelector);
-
-    const account = JSON.parse(localStorage?.getItem('login'));
-
     return (
         <div className="App">
             <div className="TodoList">
                 <Row>
                     <Col span={24}>
                         <h1>Todo App</h1>
-                    </Col>
-                    <Col span={3} offset={21}>
-                        {account && <p>Hello {account.name}!!!</p>}
                     </Col>
                     <Col span={24}>{isLogin ? <PrivateRouter /> : <PublicRouter />}</Col>
                 </Row>

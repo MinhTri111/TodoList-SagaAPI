@@ -1,13 +1,10 @@
 import axios from 'axios';
 const AUTH_API = {
     register: async (data) => {
-        return await axios.post('https://62d4fccd5112e98e4856080b.mockapi.io/users', data);
+        return await axios.post('https://ae88-118-69-77-229.ap.ngrok.io/v1/auth/register', data);
     },
-    getUserByAccount: async (account) => {
-        return await axios.get(`https://62d4fccd5112e98e4856080b.mockapi.io/users?account=${account}`);
+    login: async (data) => {
+        return await axios.post('https://ae88-118-69-77-229.ap.ngrok.io/v1/auth/login', data);
     },
-    // login: async (data) => {
-    //     return await axios.post('https://62d4fccd5112e98e4856080b.mockapi.io/todos', data);
-    // },
 };
 export default AUTH_API;

@@ -5,53 +5,35 @@ import API from './auth.api';
 
 function* registerSaga({ params, callback, callback1 }) {
     try {
-        const check = yield call(API.getUserByAccount, params.account);
-        const checkAccount = check.data.findIndex((item) => item.account === params.account);
-        if (checkAccount === -1) {
-            const res = yield call(API.register, params);
-            if (res) {
-                yield put(Action.registerSuccess(params));
-                callback();
-            }
-        } else {
-            callback1();
-            yield put(Action.registerSuccess(params));
+        const res = yield call(API.register, params);
+        if (res) {
+            yield put(Action.registerSuccess());
+            callback();
         }
     } catch (error) {
-        yield put(Action.registerSuccess(error));
-        console.log(error);
+        yield put(Action.registerFailure(error.response.data.data.message));
+        callback1(error.response.data.data.message);
     }
 }
 
 function* loginSaga({ params, callback, callback1 }) {
     try {
-        const check = yield call(API.getUserByAccount, params.account);
-        const checkAccount = check.data.findIndex(
-            (item) => item.account === params.account && item.password === params.password,
-        );
-        if (checkAccount !== -1) {
+        const res = yield call(API.login, params);
+        if (res) {
             yield put(Action.loginSuccess());
+            localStorage.setItem('token', JSON.stringify(res.data.data.token));
             callback();
-            localStorage.setItem(
-                'login',
-                JSON.stringify({
-                    account: check.data[checkAccount].account,
-                    name: check.data[checkAccount].name,
-                }),
-            );
-        } else {
-            yield put(Action.loginFailure('Wrong account or password!!!'));
-            callback1();
         }
     } catch (error) {
-        console.log(error);
-        yield put(Action.loginFailure(error));
+        yield put(Action.loginFailure(error.response.data.data.message));
+        callback1(error.response.data.data.message);
     }
 }
 
 function* logoutSaga({ params }) {
     try {
         yield put(Action.logoutSuccess());
+        localStorage.removeItem('token');
     } catch (error) {
         console.log(error);
         yield put(Action.logoutFailure(error));
