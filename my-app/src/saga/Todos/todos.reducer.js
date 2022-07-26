@@ -12,11 +12,13 @@ const initState = {
 const todosReducer = (state = initState, action) => {
     switch (action.type) {
         case Types.FETCH_REQUEST:
+            console.log('zo day roi');
             return {
                 ...state,
                 loading: true,
             };
         case Types.FETCH_SUCCESS:
+            console.log('zo day roi loi');
             return {
                 ...state,
                 todoList: action.payload,

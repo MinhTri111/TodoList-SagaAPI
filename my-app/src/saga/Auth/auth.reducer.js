@@ -27,11 +27,14 @@ const authReducer = (state = initState, action) => {
                 error: action.error,
             };
         case Types.LOGIN_REQUEST:
+            console.log('zo day roi');
             return {
                 ...state,
                 loading: true,
             };
         case Types.LOGIN_SUCCESS:
+            console.log('zo day roi 1');
+
             return {
                 ...state,
                 isLogin: true,

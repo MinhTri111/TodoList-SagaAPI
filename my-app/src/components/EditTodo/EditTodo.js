@@ -4,7 +4,7 @@ import { CheckOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { todosSelector } from '../../saga/Todos/todos.selector';
-import { deleteRequest, updateRequest, completedRequest } from '../../saga/Todos/todos.action';
+import { updateRequest } from '../../saga/Todos/todos.action';
 import { toast } from 'react-toastify';
 export default function EditTodo() {
     const id = useParams().id;

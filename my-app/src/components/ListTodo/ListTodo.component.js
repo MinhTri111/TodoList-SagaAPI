@@ -10,19 +10,19 @@ import React, { useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 const ListTodo = (props) => {
     const dispatch = useDispatch();
-
     useEffect(() => {
         dispatch(fetchRequest('fetchRequest'));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const listTodo = useSelector(todosSelector);
+    console.log('a', listTodo);
     const loading = useSelector(loadingSelector);
     return (
         <>
             <Row className="listTodo">
                 <Divider plan="true">LIST TODO</Divider>
                 <Col span={24}>
-                    {loading ? (
+                    {/* {loading ? (
                         <Spin tip="Loading...">
                             <List
                                 itemLayout="vertical"
@@ -31,34 +31,40 @@ const ListTodo = (props) => {
                                     onChange: (page) => {},
                                     pageSize: 4,
                                 }}
-                                dataSource={listTodo.data}
+                                dataSource={listTodo}
                                 renderItem={(item) => (
                                     <List.Item>
-                                        <Todo title={item.title} id={item.id} key={item.id} complete={item.completed} />
+                                        <Todo
+                                            name={item.name}
+                                            description={item.description}
+                                            id={item._id}
+                                            key={item.id}
+                                            isDone={item.isDone}
+                                        />
                                     </List.Item>
                                 )}
                             />
                         </Spin>
-                    ) : (
-                        <List
-                            itemLayout="vertical"
-                            size="large"
-                            pagination={{
-                                onChange: (page) => {},
-                                pageSize: 4,
-                            }}
-                            dataSource={
-                                props.search
-                                    ? listTodo.data.filter((item) => item.title.includes(props.search))
-                                    : listTodo.data
-                            }
-                            renderItem={(item) => (
-                                <List.Item>
-                                    <Todo title={item.title} id={item.id} key={item.id} complete={item.completed} />
-                                </List.Item>
-                            )}
-                        />
-                    )}
+                    ) : ( */}
+                    <List
+                        itemLayout="vertical"
+                        size="large"
+                        pagination={{
+                            onChange: (page) => {},
+                            pageSize: 3,
+                        }}
+                        dataSource={
+                            props.search ? listTodo.filter((item) => item.name.includes(props.search)) : listTodo
+                        }
+                        renderItem={(item) => (
+                            <List.Item>
+                                <List.Item.Meta title={<p>FOR:{item.name}</p>} />
+                                <Todo description={item.description} id={item._id} key={item.id} isDone={item.isDone} />
+                            </List.Item>
+                        )}
+                    />
+                    {/* )
+                    } */}
                 </Col>
             </Row>
             <ToastContainer />

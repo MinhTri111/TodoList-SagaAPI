@@ -3,16 +3,12 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import './header.scss';
 const items = [
     {
-        label: <Link to="/">Home</Link>,
-        key: '/',
-    },
-    {
         label: <Link to="/login">Login</Link>,
-        key: 'login',
+        key: '/login',
     },
     {
         label: <Link to="/register">Register</Link>,
-        key: 'register',
+        key: '/register',
     },
 ];
 export default function HeaderPublic() {

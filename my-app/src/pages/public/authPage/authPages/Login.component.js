@@ -34,7 +34,12 @@ export default function Login() {
                             password: '',
                         }}
                         validationSchema={Yup.object({
-                            email: Yup.string().required('Required'),
+                            email: Yup.string()
+                                .required('Required')
+                                .matches(
+                                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/s,
+                                    'Must be email',
+                                ),
                             password: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
                         })}
                         onSubmit={(values) => {

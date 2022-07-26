@@ -17,7 +17,7 @@ const StytedDiv = styled.button`
 export default function Todo(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { title, id, complete, setListSearch } = props;
+    const { description, id, isDone, setListSearch } = props;
     const { showEdit, setShowEdit, todo, setTodo } = todoHooks();
     const listTodo = useSelector(todosSelector);
     const handleChange = (e) => {
@@ -25,7 +25,7 @@ export default function Todo(props) {
     };
     const isLogin = useSelector(isLoginSelector);
     const handleEditClick = () => {
-        navigate(`/${id}/${title}`, { replace: true });
+        // navigate(`/${id}/${title}`, { replace: true });
     };
     const handleSaveClick = () => {
         switch (todo) {
@@ -72,13 +72,13 @@ export default function Todo(props) {
             {!showEdit ? (
                 <Row>
                     <Col span={18}>
-                        <p className="test">{title}</p>
+                        <p className="test">Content: {description}</p>
                     </Col>
-                    <Col span={1}>{complete && <CheckOutlined />}</Col>
+                    <Col span={1}>{isDone && <CheckOutlined />}</Col>
                     {isLogin && (
                         <Col span={5}>
                             <StytedDiv>
-                                {complete ? (
+                                {isDone ? (
                                     <Checkbox checked onChange={handleChangeCheckbox}>
                                         Done
                                     </Checkbox>
@@ -114,12 +114,12 @@ export default function Todo(props) {
             ) : (
                 <Row>
                     <Col span={19}>
-                        <Input size="medium" placeholder={title} onChange={handleChange} />
+                        <Input size="medium" placeholder={description} onChange={handleChange} />
                     </Col>
                     {isLogin && (
                         <Col span={5}>
                             <StytedDiv>
-                                {complete ? (
+                                {isDone ? (
                                     <Checkbox checked onChange={handleChangeCheckbox}>
                                         Done
                                     </Checkbox>

@@ -1,13 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-
-import ListTodo from '../components/ListTodo/ListTodo.component';
 import { HeaderPublic } from '../layouts/header';
 import { Login, Register } from '../pages/public/authPage/authPages';
 const PublicRouter = () => (
     <Routes>
         <Route path="/" element={<HeaderPublic />}>
-            <Route index element={<ListTodo />} />
-            <Route path="login" element={<Login />} />
+            <Route path="login" index element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route
                 path="*"

@@ -6,10 +6,12 @@ import API from './todos.api';
 function* fetchSaga({ params }) {
     try {
         const res = yield call(API.fetch, params);
+        console.log('data', JSON.stringify(res.data.data.items));
         if (res) {
-            yield put(Action.fetchSuccess(res));
+            yield put(Action.fetchSuccess(res.data.data.items));
         }
     } catch (error) {
+        console.log('zo day');
         yield put(Action.fetchFailure(error));
         console.log(error);
     }

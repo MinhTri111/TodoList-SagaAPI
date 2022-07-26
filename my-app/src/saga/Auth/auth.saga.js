@@ -25,6 +25,7 @@ function* loginSaga({ params, callback, callback1 }) {
             callback();
         }
     } catch (error) {
+        console.log('zpday');
         yield put(Action.loginFailure(error.response.data.data.message));
         callback1(error.response.data.data.message);
     }
