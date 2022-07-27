@@ -2,10 +2,14 @@ import { useState } from 'react';
 
 const addTodoHooks = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [newTodo, setNewTodo] = useState('');
+    const [nameTodo, setNameTodo] = useState('');
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [description, setDescription] = useState('');
     return {
-        newTodo,
-        setNewTodo,
+        nameTodo,
+        setNameTodo,
+        description,
+        setDescription,
     };
 };
 export default addTodoHooks;

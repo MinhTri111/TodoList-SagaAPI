@@ -15,7 +15,7 @@ export const loginRequest = (params, callback, callback1) => ({
     callback,
     callback1,
 });
-export const loginSuccess = () => ({ type: Types.LOGIN_SUCCESS });
+export const loginSuccess = (payload) => ({ type: Types.LOGIN_SUCCESS, payload: payload });
 export const loginFailure = (error) => ({ type: Types.LOGIN_ERROR, error });
 
 export const logoutRequest = () => ({ type: Types.LOGOUT_REQUEST });

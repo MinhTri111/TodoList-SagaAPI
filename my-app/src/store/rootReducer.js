@@ -16,7 +16,7 @@ const todoPersistConfig = {
     blacklist: ['todolist'],
 };
 const authPersistConfig = {
-    key: 'todo',
+    key: 'auth',
     storage: storage,
     blacklist: ['auth'],
 };

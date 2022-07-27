@@ -1,57 +1,94 @@
-import React, { useState } from 'react';
-import { Row, Col, Tooltip, Button, Input } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Input, Space } from 'antd';
+import * as Yup from 'yup';
+import { useField, Form, Formik } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { todosSelector } from '../../saga/Todos/todos.selector';
 import { updateRequest } from '../../saga/Todos/todos.action';
+import { tokenSelector, userIdSelector } from '../../saga/Auth/auth.selector';
 import { toast } from 'react-toastify';
+const MyTextInput = ({ label, ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+        <>
+            <label htmlFor={props.id || props.name}>
+                {label}
+                <Input {...field} {...props} autoComplete="on" />
+            </label>
+            {meta.touched || meta.error ? <div>{meta.error}</div> : null}
+        </>
+    );
+};
 export default function EditTodo() {
     const id = useParams().id;
-    const title = useParams().title;
-    console.log(title);
-    const dispatch = useDispatch();
-    const listTodo = useSelector(todosSelector);
-    const [todo, setTodo] = useState('');
-    const handleChange = (e) => {
-        setTodo(e.target.value);
-    };
+    const name = useParams().name;
+    const description = useParams().description;
+    const token = useSelector(tokenSelector);
+    const userID = useSelector(userIdSelector);
     const navigate = useNavigate();
-    const handleSaveClick = () => {
-        switch (todo) {
-            case '':
-                return toast.error('This field is required!!!');
-            case todo:
-                const check = listTodo.data?.findIndex((value) => value.title === todo);
-                if (check === -1) {
-                    return dispatch(
-                        updateRequest({ id: id, title: todo }, () => {
-                            toast.success('Update Success!!!');
-                            setTodo('');
-                            navigate('/');
-                        }),
-                    );
-                }
-                return toast.error('This to do already exits!!!');
-            default:
-        }
-    };
-
+    const dispatch = useDispatch();
     return (
         <>
             <div className="editTodo">
                 <Row>
-                    <Col span={3}>
-                        <label htmlFor="todo">Edit Todo</label>
+                    <Col span={24}>
+                        <Formik
+                            initialValues={{
+                                name: '',
+                                description: '',
+                            }}
+                            validationSchema={Yup.object({
+                                name: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
+                                description: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
+                            })}
+                            onSubmit={(values) => {
+                                dispatch(
+                                    updateRequest({ ...values, _id: id, userId: userID }, token, () => {
+                                        navigate('/');
+                                        toast.success('Update Todo Success!!!');
+                                    }),
+                                );
+                            }}
+                        >
+                            <Form>
+                                <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+                                    <Row>
+                                        <Col span={24}>
+                                            <MyTextInput
+                                                label="Name Todo:"
+                                                name="name"
+                                                id="name"
+                                                type="text"
+                                                placeholder={name}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            {' '}
+                                            <MyTextInput
+                                                label="Description:"
+                                                name="description"
+                                                id="description"
+                                                type="text"
+                                                placeholder={description}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            {' '}
+                                            <Button type="primary" htmlType="submit" style={{ marginTop: 10 }}>
+                                                Update Todo
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Space>
+                            </Form>
+                        </Formik>
                     </Col>
-                    <Col span={20}>
-                        <Input size="medium" id="todo" onChange={handleChange} placeholder={title} />
-                    </Col>
-                    <Col span={1}>
-                        <Tooltip title="Edit">
-                            <Button type="primary" shape="circle" icon={<CheckOutlined />} onClick={handleSaveClick} />
-                        </Tooltip>
-                    </Col>
+                    {/* <Col span={2} offset={22}>
+                    {loading && <Spin tip="Loading..." />}
+                </Col> */}
                 </Row>
             </div>
         </>

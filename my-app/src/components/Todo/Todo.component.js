@@ -8,7 +8,7 @@ import { todosSelector } from '../../saga/Todos/todos.selector';
 import todoHooks from './todo.hooks';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { isLoginSelector } from '../../saga/Auth/auth.selector';
+import { isLoginSelector, tokenSelector, userIdSelector } from '../../saga/Auth/auth.selector';
 const StytedDiv = styled.button`
     padding-left: 10px;
     border: 0;
@@ -17,15 +17,17 @@ const StytedDiv = styled.button`
 export default function Todo(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { description, id, isDone, setListSearch } = props;
+    const { name, description, userId, id, isDone, setListSearch } = props;
     const { showEdit, setShowEdit, todo, setTodo } = todoHooks();
     const listTodo = useSelector(todosSelector);
+    const userID = useSelector(userIdSelector);
+    const token = useSelector(tokenSelector);
     const handleChange = (e) => {
         setTodo(e.target.value);
     };
     const isLogin = useSelector(isLoginSelector);
     const handleEditClick = () => {
-        // navigate(`/${id}/${title}`, { replace: true });
+        navigate(`/${id}/${name}/${description}`, { replace: true });
     };
     const handleSaveClick = () => {
         switch (todo) {
@@ -49,10 +51,19 @@ export default function Todo(props) {
 
     const handleDeleteClick = () => {
         dispatch(
-            deleteRequest(id, () => {
-                toast.success('Delete Success!!!');
-                setListSearch('');
-            }),
+            deleteRequest(
+                id,
+                token,
+                {
+                    userId: userID,
+                },
+                () => {
+                    toast.success('Delete Success!!!');
+                },
+                () => {
+                    toast.success('Delete Failed!!!');
+                },
+            ),
         );
     };
     const handleExitClick = () => {
@@ -69,89 +80,47 @@ export default function Todo(props) {
     };
     return (
         <>
-            {!showEdit ? (
-                <Row>
-                    <Col span={18}>
-                        <p className="test">Content: {description}</p>
-                    </Col>
-                    <Col span={1}>{isDone && <CheckOutlined />}</Col>
-                    {isLogin && (
-                        <Col span={5}>
-                            <StytedDiv>
-                                {isDone ? (
-                                    <Checkbox checked onChange={handleChangeCheckbox}>
-                                        Done
-                                    </Checkbox>
-                                ) : (
-                                    <Checkbox onChange={handleChangeCheckbox} checked={false}>
-                                        Done
-                                    </Checkbox>
-                                )}
-                            </StytedDiv>
+            <Row>
+                <Col span={18}>
+                    <p className="test">Content: {description}</p>
+                </Col>
+                <Col span={1}>{isDone && <CheckOutlined />}</Col>
+                {isLogin && userId === userID && (
+                    <Col span={5}>
+                        <StytedDiv>
+                            {isDone ? (
+                                <Checkbox checked onChange={handleChangeCheckbox}>
+                                    Done
+                                </Checkbox>
+                            ) : (
+                                <Checkbox onChange={handleChangeCheckbox} checked={false}>
+                                    Done
+                                </Checkbox>
+                            )}
+                        </StytedDiv>
 
-                            <Space>
-                                <Tooltip title="Delete">
-                                    <Button
-                                        type="primary"
-                                        danger
-                                        shape="circle"
-                                        icon={<DeleteOutlined />}
-                                        onClick={handleDeleteClick}
-                                    />
-                                </Tooltip>
-                                <Tooltip title="Edit">
-                                    <Button
-                                        type="primary"
-                                        shape="circle"
-                                        icon={<EditOutlined />}
-                                        onClick={handleEditClick}
-                                    />
-                                </Tooltip>
-                            </Space>
-                        </Col>
-                    )}
-                </Row>
-            ) : (
-                <Row>
-                    <Col span={19}>
-                        <Input size="medium" placeholder={description} onChange={handleChange} />
+                        <Space>
+                            <Tooltip title="Delete">
+                                <Button
+                                    type="primary"
+                                    danger
+                                    shape="circle"
+                                    icon={<DeleteOutlined />}
+                                    onClick={handleDeleteClick}
+                                />
+                            </Tooltip>
+                            <Tooltip title="Edit">
+                                <Button
+                                    type="primary"
+                                    shape="circle"
+                                    icon={<EditOutlined />}
+                                    onClick={handleEditClick}
+                                />
+                            </Tooltip>
+                        </Space>
                     </Col>
-                    {isLogin && (
-                        <Col span={5}>
-                            <StytedDiv>
-                                {isDone ? (
-                                    <Checkbox checked onChange={handleChangeCheckbox}>
-                                        Done
-                                    </Checkbox>
-                                ) : (
-                                    <Checkbox onChange={handleChangeCheckbox} checked={false}>
-                                        Done
-                                    </Checkbox>
-                                )}
-                            </StytedDiv>
-                            <Space>
-                                <Tooltip title="Exit">
-                                    <Button
-                                        type="primary"
-                                        danger
-                                        shape="circle"
-                                        icon={<LogoutOutlined />}
-                                        onClick={handleExitClick}
-                                    />
-                                </Tooltip>
-                                <Tooltip title="Save">
-                                    <Button
-                                        type="primary"
-                                        shape="circle"
-                                        icon={<CheckOutlined />}
-                                        onClick={handleSaveClick}
-                                    />
-                                </Tooltip>
-                            </Space>
-                        </Col>
-                    )}
-                </Row>
-            )}
+                )}
+            </Row>
         </>
     );
 }

@@ -1,63 +1,92 @@
 import React from 'react';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Tooltip, Input, Col, Row } from 'antd';
+import { Button, Space, Input, Col, Row } from 'antd';
+import * as Yup from 'yup';
+import { useField, Form, Formik } from 'formik';
 import { addRequest } from '../../saga/Todos/todos.action';
 import { useDispatch, useSelector } from 'react-redux';
-import { todosSelector } from '../../saga/Todos/todos.selector';
 import 'react-toastify/dist/ReactToastify.css';
-import addTodoHook from './addTodo.hooks';
-import ListTodo from '../ListTodo/ListTodo.component';
 import { toast } from 'react-toastify';
+import { tokenSelector } from '../../saga/Auth/auth.selector';
+import { useNavigate } from 'react-router-dom';
+const MyTextInput = ({ label, ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+        <>
+            <label htmlFor={props.id || props.name}>
+                {label}
+                <Input {...field} {...props} autoComplete="on" />
+            </label>
+            {meta.touched || meta.error ? <div>{meta.error}</div> : null}
+        </>
+    );
+};
 export default function AddTodo() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { newTodo, setNewTodo } = addTodoHook();
-    const handleChange = (e) => {
-        setNewTodo(e.target.value);
-    };
-    const listTodo = useSelector(todosSelector);
-
-    const handleClickAdd = () => {
-        switch (newTodo) {
-            case '':
-                return toast.error('This field is required!!!');
-            case newTodo:
-                const check = listTodo.data?.findIndex((value) => value.title === newTodo);
-                if (check === -1) {
-                    return dispatch(
-                        addRequest({ title: newTodo, completed: false }, () => {
-                            toast.success('Add Success!');
-                            setNewTodo('');
-                        }),
-                    );
-                }
-                return toast.error('This to do already exits!!!');
-            default:
-        }
-    };
-
+    const token = useSelector(tokenSelector);
     return (
         <>
             <div className="addTodo">
                 <Row>
-                    <Col span={3}>
-                        <label htmlFor="todo">Input Todo</label>
-                    </Col>
-                    <Col span={20}>
-                        <Input placeholder="New Todo" size="medium" id="todo" onChange={handleChange} value={newTodo} />
-                    </Col>
-                    <Col span={1}>
-                        <Tooltip title="Add">
-                            <Button
-                                type="primary"
-                                shape="circle"
-                                icon={<PlusCircleOutlined />}
-                                onClick={handleClickAdd}
-                            />
-                        </Tooltip>
-                    </Col>
                     <Col span={24}>
-                        <ListTodo />
+                        <Formik
+                            initialValues={{
+                                name: '',
+                                description: '',
+                            }}
+                            validationSchema={Yup.object({
+                                name: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
+                                description: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
+                            })}
+                            onSubmit={(values) => {
+                                dispatch(
+                                    addRequest(values, token, () => {
+                                        navigate('/');
+                                        toast.success('Add Success!!!');
+                                    }),
+                                );
+                            }}
+                        >
+                            <Form>
+                                <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+                                    <Row>
+                                        <Col span={24}>
+                                            <MyTextInput
+                                                label="Name Todo:"
+                                                name="name"
+                                                id="name"
+                                                type="text"
+                                                placeholder="Name todo..."
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            {' '}
+                                            <MyTextInput
+                                                label="Description:"
+                                                name="description"
+                                                id="description"
+                                                type="text"
+                                                placeholder="Description..."
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            {' '}
+                                            <Button type="primary" htmlType="submit" style={{ marginTop: 10 }}>
+                                                Add Todo
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Space>
+                            </Form>
+                        </Formik>
                     </Col>
+                    {/* <Col span={2} offset={22}>
+                    {loading && <Spin tip="Loading..." />}
+                </Col> */}
                 </Row>
             </div>
         </>

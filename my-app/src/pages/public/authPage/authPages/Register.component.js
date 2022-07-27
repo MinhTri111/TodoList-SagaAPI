@@ -37,7 +37,12 @@ export default function Register() {
                             cfpassword: '',
                         }}
                         validationSchema={Yup.object({
-                            email: Yup.string().required('Required'),
+                            email: Yup.string()
+                                .required('Required')
+                                .matches(
+                                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/s,
+                                    'Must be email',
+                                ),
                             password: Yup.string().min(6, 'Must be 6 characters or less').required('Required'),
                             cfpassword: Yup.string()
                                 .oneOf([Yup.ref('password'), null], 'Passwords must match')

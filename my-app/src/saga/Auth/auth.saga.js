@@ -20,12 +20,11 @@ function* loginSaga({ params, callback, callback1 }) {
     try {
         const res = yield call(API.login, params);
         if (res) {
-            yield put(Action.loginSuccess());
-            localStorage.setItem('token', JSON.stringify(res.data.data.token));
+            const me = yield call(API.getMe, res.data.data.token);
+            yield put(Action.loginSuccess({ token: JSON.stringify(res.data.data.token), id: me.data.data._id }));
             callback();
         }
     } catch (error) {
-        console.log('zpday');
         yield put(Action.loginFailure(error.response.data.data.message));
         callback1(error.response.data.data.message);
     }
@@ -34,7 +33,6 @@ function* loginSaga({ params, callback, callback1 }) {
 function* logoutSaga({ params }) {
     try {
         yield put(Action.logoutSuccess());
-        localStorage.removeItem('token');
     } catch (error) {
         console.log(error);
         yield put(Action.logoutFailure(error));

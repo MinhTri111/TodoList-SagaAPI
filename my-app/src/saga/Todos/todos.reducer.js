@@ -2,7 +2,7 @@ import * as Types from './todos.type';
 const initState = {
     todoList: [],
     isAddSuccess: false,
-    isDeleteSucces: false,
+    isDeleteSuccess: false,
     isUpdateSuccess: false,
     isSetCompletedSuccess: false,
     loading: false,
@@ -92,20 +92,20 @@ const todosReducer = (state = initState, action) => {
             return {
                 ...state,
                 loading: true,
-                isDeleteSucces: false,
+                isDeleteSuccess: false,
             };
 
         case Types.DELETE_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                isDeleteSucces: true,
+                isDeleteSuccess: true,
             };
         case Types.DELETE_ERROR:
             return {
                 ...state,
                 loading: false,
-                isDeleteSucces: false,
+                isDeleteSuccess: false,
                 error: action.error,
             };
         default:

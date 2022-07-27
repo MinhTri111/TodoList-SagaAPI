@@ -35,9 +35,9 @@ export default function HeaderPrivate() {
                             label: (
                                 <p
                                     onClick={() => {
-                                        localStorage.removeItem('login');
+                                        localStorage.removeItem('token');
                                         dispatch(logoutRequest());
-                                        navigate('/');
+                                        navigate('/login');
                                     }}
                                 >
                                     Logout

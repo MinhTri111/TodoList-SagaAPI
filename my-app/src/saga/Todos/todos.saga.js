@@ -6,24 +6,21 @@ import API from './todos.api';
 function* fetchSaga({ params }) {
     try {
         const res = yield call(API.fetch, params);
-        console.log('data', JSON.stringify(res.data.data.items));
         if (res) {
             yield put(Action.fetchSuccess(res.data.data.items));
         }
     } catch (error) {
-        console.log('zo day');
         yield put(Action.fetchFailure(error));
         console.log(error);
     }
 }
 
-function* addSaga({ params, callback }) {
+function* addSaga({ params, token, callback }) {
     try {
-        const res = yield call(API.add, params);
+        const res = yield call(API.add, JSON.parse(token), params);
         if (res) {
             yield put(Action.addSuccess(params));
             callback();
-            yield put(Action.fetchRequest('fetchRequest'));
         }
     } catch (error) {
         yield put(Action.addError(error));
@@ -31,30 +28,30 @@ function* addSaga({ params, callback }) {
     }
 }
 
-function* updateSaga({ params, callback }) {
+function* updateSaga({ params, token, callback }) {
     try {
-        const res = yield call(API.update, params);
+        const res = yield call(API.update, JSON.parse(token), params);
         if (res) {
             yield put(Action.updateSuccess(params));
             callback();
-            yield put(Action.fetchRequest('fetchRequest'));
         }
     } catch (error) {
         yield put(Action.updateError(error));
         console.log(error);
     }
 }
-function* deleteSaga({ params, callback }) {
+function* deleteSaga({ params, token, data, callback, callback1 }) {
+    console.log(data);
     try {
-        const res = yield call(API.delete, params);
+        const res = yield call(API.delete, JSON.parse(token), params, data);
         if (res) {
             yield put(Action.deleteSuccess(params));
-            yield put(Action.fetchRequest('fetchRequest'));
             callback();
         }
     } catch (error) {
         yield put(Action.deleteError(error));
         console.log(error);
+        callback1();
     }
 }
 function* completedSaga({ params, callback }) {

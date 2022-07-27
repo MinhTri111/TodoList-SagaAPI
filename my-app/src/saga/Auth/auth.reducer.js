@@ -1,5 +1,7 @@
 import * as Types from './auth.type';
 const initState = {
+    token: '',
+    userID: '',
     isLogin: false,
     isRegisterSuccess: false,
     loading: false,
@@ -27,16 +29,15 @@ const authReducer = (state = initState, action) => {
                 error: action.error,
             };
         case Types.LOGIN_REQUEST:
-            console.log('zo day roi');
             return {
                 ...state,
                 loading: true,
             };
         case Types.LOGIN_SUCCESS:
-            console.log('zo day roi 1');
-
             return {
                 ...state,
+                token: action.payload.token,
+                userID: action.payload.id,
                 isLogin: true,
                 loading: false,
             };
@@ -55,6 +56,7 @@ const authReducer = (state = initState, action) => {
         case Types.LOGOUT_SUCCESS:
             return {
                 ...state,
+                token: '',
                 isLogin: false,
                 loading: false,
             };

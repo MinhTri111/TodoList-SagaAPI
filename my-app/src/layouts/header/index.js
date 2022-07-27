@@ -1,4 +1,4 @@
-import HeaderPrivate from './HeaderPrivate.component';
-import HeaderPublic from './HeaderPublic.component';
+import DashBoardPrivate from './DashBoardPrivate.component';
+import DashBoardPublic from './DashBoardPublic.component';
 
-export { HeaderPublic, HeaderPrivate };
+export { DashBoardPublic, DashBoardPrivate };
