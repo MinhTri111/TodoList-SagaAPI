@@ -1,6 +1,7 @@
 import * as Types from './todos.type';
 const initState = {
     todoList: [],
+    currentPage: 1,
     isAddSuccess: false,
     isDeleteSuccess: false,
     isUpdateSuccess: false,
@@ -12,13 +13,11 @@ const initState = {
 const todosReducer = (state = initState, action) => {
     switch (action.type) {
         case Types.FETCH_REQUEST:
-            console.log('zo day roi');
             return {
                 ...state,
                 loading: true,
             };
         case Types.FETCH_SUCCESS:
-            console.log('zo day roi loi');
             return {
                 ...state,
                 todoList: action.payload,
@@ -107,6 +106,11 @@ const todosReducer = (state = initState, action) => {
                 loading: false,
                 isDeleteSuccess: false,
                 error: action.error,
+            };
+        case Types.SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.payload,
             };
         default:
             return state;

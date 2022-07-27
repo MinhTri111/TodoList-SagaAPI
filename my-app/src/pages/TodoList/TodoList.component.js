@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import { isLoginSelector } from '../../saga/Auth/auth.selector';
 const TodoList = () => {
     const isLogin = useSelector(isLoginSelector);
-    console.log('login', isLogin);
     return (
         <div className="App">
             <div className="TodoList">

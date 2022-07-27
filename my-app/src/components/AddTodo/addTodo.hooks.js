@@ -1,15 +1,15 @@
-import { useState } from 'react';
-
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { tokenSelector } from "../../saga/Auth/auth.selector";
 const addTodoHooks = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [nameTodo, setNameTodo] = useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [description, setDescription] = useState('');
-    return {
-        nameTodo,
-        setNameTodo,
-        description,
-        setDescription,
-    };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector(tokenSelector);
+  return {
+    navigate,
+    dispatch,
+    token,
+  };
 };
 export default addTodoHooks;

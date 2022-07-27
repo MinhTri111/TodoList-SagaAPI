@@ -15,7 +15,7 @@ function* fetchSaga({ params }) {
     }
 }
 
-function* addSaga({ params, token, callback }) {
+function* addSaga({ params, token, callback, callback1 }) {
     try {
         const res = yield call(API.add, JSON.parse(token), params);
         if (res) {
@@ -25,48 +25,50 @@ function* addSaga({ params, token, callback }) {
     } catch (error) {
         yield put(Action.addError(error));
         console.log(error);
+        callback1();
     }
 }
 
-function* updateSaga({ params, token, callback }) {
+function* updateSaga({ params, token, callback, callback1 }) {
     try {
         const res = yield call(API.update, JSON.parse(token), params);
         if (res) {
-            yield put(Action.updateSuccess(params));
+            yield put(Action.updateSuccess());
+
             callback();
         }
     } catch (error) {
         yield put(Action.updateError(error));
         console.log(error);
+        callback1();
+    }
+}
+function* completedSaga({ params, token, callback, callback1 }) {
+    try {
+        const res = yield call(API.update, JSON.parse(token), params);
+        if (res) {
+            yield put(Action.completedSuccess());
+            yield put(Action.fetchRequest(JSON.parse(token)));
+            callback();
+        }
+    } catch (error) {
+        yield put(Action.completedError(error));
+        console.log(error);
+        callback1();
     }
 }
 function* deleteSaga({ params, token, data, callback, callback1 }) {
-    console.log(data);
     try {
         const res = yield call(API.delete, JSON.parse(token), params, data);
         if (res) {
-            yield put(Action.deleteSuccess(params));
+            yield put(Action.deleteSuccess());
+            yield put(Action.fetchRequest(JSON.parse(token)));
             callback();
         }
     } catch (error) {
         yield put(Action.deleteError(error));
         console.log(error);
         callback1();
-    }
-}
-function* completedSaga({ params, callback }) {
-    try {
-        const res = yield call(API.update, params);
-        if (res) {
-            yield put(Action.completedSuccess(params));
-            if (params.completed === true) {
-                callback();
-            }
-            yield put(Action.fetchRequest('fetchRequest'));
-        }
-    } catch (error) {
-        yield put(Action.completedError(error));
-        console.log(error);
     }
 }
 

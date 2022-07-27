@@ -1,16 +1,23 @@
-import { useState } from 'react';
-
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useNavigate } from "react-router-dom";
+import {
+  isLoginSelector,
+  tokenSelector,
+  userIdSelector,
+} from "../../saga/Auth/auth.selector";
+import { useDispatch, useSelector } from "react-redux";
 const todoHooks = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [showEdit, setShowEdit] = useState(false);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [todo, setTodo] = useState('');
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return {
-        showEdit,
-        setShowEdit,
-        todo,
-        setTodo,
-    };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userID = useSelector(userIdSelector);
+  const token = useSelector(tokenSelector);
+  const isLogin = useSelector(isLoginSelector);
+  return {
+    navigate,
+    dispatch,
+    userID,
+    token,
+    isLogin,
+  };
 };
 export default todoHooks;

@@ -10,7 +10,7 @@ const TODO_API = {
         return await createAxios(token).put('/todo', data);
     },
     delete: async (token, id, data) => {
-        return await createAxios(token).delete(`/todo?_id=${id}`, data);
+        return await createAxios(token).delete(`/todo?_id=${id}`, { data: data });
     },
 };
 export default TODO_API;
